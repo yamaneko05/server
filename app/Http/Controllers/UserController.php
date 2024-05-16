@@ -13,4 +13,17 @@ class UserController extends Controller
             'posts' => $user->posts
         ];
     }
+
+    public function update (Request $request, User $user) {
+        $icon_file = $request->file('icon_file');
+
+        $user->name = $request->name;
+        $user->bio = $request->bio;
+        if ($icon_file) {
+            $user->icon_file = $icon_file[0]->store('icons', 'public');
+        }
+        $user->save();
+
+        return $user;
+    }
 }
