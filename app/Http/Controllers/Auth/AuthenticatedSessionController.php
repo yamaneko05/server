@@ -23,10 +23,10 @@ class AuthenticatedSessionController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return response('', '403');
+            return response()->noContent();
         }
-
-        return response()->noContent();
+        
+        return response('', '403');
 
         // $request->authenticate();
 
