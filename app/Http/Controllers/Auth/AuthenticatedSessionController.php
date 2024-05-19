@@ -15,11 +15,24 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): Response
     {
-        $request->authenticate();
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-        $request->session()->regenerate();
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        return response('');
+            return response('', '403');
+        }
+
+        return response()->noContent();
+
+        // $request->authenticate();
+
+        // $request->session()->regenerate();
+        
+        // return response()->noContent();
     }
 
     /**
