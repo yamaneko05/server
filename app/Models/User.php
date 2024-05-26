@@ -4,9 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -46,13 +48,40 @@ class User extends Authenticatable
         ];
     }
 
-    protected $appends = ['posts_count'];
+    protected $appends = ['posts_count', 'followings_count', 'followers_count', 'following'];
 
     public function getPostsCountAttribute() {
         return $this->posts()->count();
     }
 
+    public function getFollowingsCountAttribute() {
+        return $this->followings()->count();
+    }
+
+    public function getFollowersCountAttribute() {
+        return $this->followers()->count();
+    }
+
+    # 認証済ユーザーがこのユーザーをフォロー済であればFollowオブジェクトを返す
+    public function getFollowingAttribute() {
+        return $this->hasMany(Following::class, 'followee_id')
+            ->where('follower_id', Auth::user()->id)
+            ->first();
+    }
+
     public function posts(): HasMany {
         return $this->hasMany(Post::class);
+    }
+
+    public function followings(): BelongsToMany {
+        return $this->belongsToMany(self::class, 'followings', 'follower_id', 'followee_id');
+    }
+
+    public function followers(): BelongsToMany {
+        return $this->belongsToMany(self::class, 'followings', 'followee_id', 'follower_id');
+    }
+
+    public function likes(): BelongsToMany {
+        return $this->BelongsToMany(Post::class, 'likes');
     }
 }

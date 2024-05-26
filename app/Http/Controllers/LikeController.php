@@ -3,21 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Like;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
-    public function store (Request $request) {
-        $like = new Like();
-        $like->user_id = $request->user()->id;
-        $like->post_id = $request->post_id;
-        $like->save();
+    public function like (Request $request, User $user) {
+        $user->likes()->attach($request->post_id);
 
-        return $like;
+        return response('');
     }
 
-    public function destroy (Request $request, Like $like) {
-        $like->delete();
+    public function unlike (Request $request, User $user) {
+        $user->likes()->detach($request->post_id);
 
         return response('');
     }

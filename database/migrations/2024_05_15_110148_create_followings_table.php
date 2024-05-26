@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('follows', function (Blueprint $table) {
+        Schema::create('followings', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('follower_id')->constrained('users'); // from
             $table->foreignId('followee_id')->constrained('users'); // to
             $table->timestamps();
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('follows');
+        Schema::dropIfExists('followings');
     }
 };
