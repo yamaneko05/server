@@ -11,6 +11,7 @@ class PostController extends Controller
         $parent_id = $request->parent_id;
 
         return Post::orderBy('created_at', 'desc')
+            ->whereNull('parent_id')
             ->when($parent_id, function ($query) use ($parent_id) {
                 $query->where('parent_id', $parent_id);
             })
