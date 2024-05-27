@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FollowingController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Models\Following;
@@ -28,6 +29,8 @@ Route::prefix('/api')->middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/users/{user}/followings', [FollowingController::class, 'followings']);
     Route::get('/users/{user}/followers', [FollowingController::class, 'followers']);
+
+    Route::get('/users/{user}/notifications', [NotificationController::class, 'index']);
 });
 
 require __DIR__.'/auth.php';

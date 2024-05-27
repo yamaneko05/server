@@ -22,7 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'password'
     ];
 
     /**
@@ -48,7 +48,13 @@ class User extends Authenticatable
         ];
     }
 
-    protected $appends = ['posts_count', 'followings_count', 'followers_count', 'following'];
+    protected $appends = [
+        'posts_count',
+        'followings_count',
+        'followers_count',
+        'following',
+        'unread_notifications_count'
+    ];
 
     public function getPostsCountAttribute() {
         return $this->posts()->count();
@@ -67,6 +73,10 @@ class User extends Authenticatable
         return $this->hasMany(Following::class, 'followee_id')
             ->where('follower_id', Auth::user()->id)
             ->first();
+    }
+
+    public function getUnreadNotificationsCountAttribute() {
+        return $this->unreadNotifications()->count();
     }
 
     public function posts(): HasMany {

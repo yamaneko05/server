@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Follow;
 use App\Models\Following;
 use App\Models\User;
+use App\Notifications\Followed;
 use Illuminate\Http\Request;
 
 class FollowingController extends Controller
@@ -18,7 +19,11 @@ class FollowingController extends Controller
     }
 
     public function follow (Request $request, User $user) {
-        $user->followings()->attach($request->followee_id);
+        $followee = User::find($request->followee_id);
+
+        $user->followings()->attach($followee->id);
+
+        $followee->notify(new Followed($user));
 
         return response('');
     }
