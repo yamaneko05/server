@@ -60,7 +60,7 @@ class User extends Authenticatable
 
     protected function iconFile(): Attribute {
         return Attribute::make(
-            get: fn (string $value) => config('app.url').'/storage/'.$value
+            get: fn (string|null $value) => $value ? config('app.url').'/storage/'.$value : null
         );
     }
 
