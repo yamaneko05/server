@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,12 @@ class Post extends Model
     protected $with = ['user'];
 
     protected $appends = ['children_count', 'likers_count', 'like'];
+
+    protected function imageFile(): Attribute {
+        return Attribute::make(
+            get: fn (string|null $value) => $value ? config('app.url').'/storage/'.$value : null
+        );
+    }
 
     public function getLikeAttribute() {
         return $this->likers()->where('user_id', Auth::user()->id)->first();
