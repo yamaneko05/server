@@ -10,7 +10,14 @@ class UserController extends Controller
 {
     public function show (User $user) {
         return [
-            'user' => $user,
+            'user' => $user->append([
+                'posts_count',
+                'followings_count',
+                'followers_count',
+                'room',
+                'following',
+                'unread_notifications_count'        
+            ]),
             'posts' => $user->posts
         ];
     }

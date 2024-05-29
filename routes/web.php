@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\FollowingController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
 use App\Models\Following;
 use Illuminate\Http\Request;
@@ -31,6 +33,10 @@ Route::prefix('/api')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/users/{user}/followers', [FollowingController::class, 'followers']);
 
     Route::get('/users/{user}/notifications', [NotificationController::class, 'index']);
+
+    Route::apiResource('users.rooms', RoomController::class)->shallow()->only(['index', 'show', 'store', 'destroy']);
+
+    Route::apiResource('rooms.messages', MessageController::class)->shallow()->only(['index', 'store']);
 });
 
 require __DIR__.'/auth.php';

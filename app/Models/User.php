@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -50,14 +51,6 @@ class User extends Authenticatable
         ];
     }
 
-    protected $appends = [
-        'posts_count',
-        'followings_count',
-        'followers_count',
-        'following',
-        'unread_notifications_count'
-    ];
-
     protected function iconFile(): Attribute {
         return Attribute::make(
             get: fn (string|null $value) => $value ? config('app.url').'/storage/'.$value : null
@@ -74,6 +67,14 @@ class User extends Authenticatable
 
     public function getFollowersCountAttribute() {
         return $this->followers()->count();
+    }
+
+    public function getRoomAttribute() {
+        return $this->rooms()
+        ->whereHas('users', function (Builder $query) {
+            $query->where('user_id', Auth::user()->id);
+        })
+        ->first();
     }
 
     # 認証済ユーザーがこのユーザーをフォロー済であればFollowオブジェクトを返す
@@ -101,5 +102,9 @@ class User extends Authenticatable
 
     public function likes(): BelongsToMany {
         return $this->BelongsToMany(Post::class, 'likes');
+    }
+
+    public function rooms(): BelongsToMany {
+        return $this->belongsToMany(Room::class);
     }
 }
