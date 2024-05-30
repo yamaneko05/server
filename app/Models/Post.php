@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\DiffForHumans;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,10 @@ class Post extends Model
     protected $with = ['user'];
 
     protected $appends = ['children_count', 'likers_count', 'like'];
+
+    protected $casts = [
+        'created_at' => DiffForHumans::class,
+    ];
 
     protected function imageFile(): Attribute {
         return Attribute::make(
