@@ -8,8 +8,12 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function index (Room $room) {
-        return $room->messages()->orderBy('created_at')->get();
+    public function index (Request $request, Room $room) {
+        $messages = $room->messages()->orderBy('created_at')->get();
+
+        $room->unreadMessages()->update(['read_at' => now()]);
+
+        return $messages;
     }
 
     public function store (Request $request, Room $room) {

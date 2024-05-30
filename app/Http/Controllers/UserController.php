@@ -15,8 +15,7 @@ class UserController extends Controller
                 'followings_count',
                 'followers_count',
                 'room',
-                'following',
-                'unread_notifications_count'        
+                'following'
             ]),
             'posts' => $user->posts
         ];

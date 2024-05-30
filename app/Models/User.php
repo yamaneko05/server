@@ -57,6 +57,12 @@ class User extends Authenticatable
         );
     }
 
+    public function getUnreadMessagesCountAttribute() {
+        return Message::whereIn('room_id', $this->rooms->pluck('id'))
+        ->where('user_id', '<>', Auth::user()->id)
+        ->whereNull('read_at')->count();
+    }
+
     public function getPostsCountAttribute() {
         return $this->posts()->count();
     }

@@ -17,7 +17,10 @@ Route::get('/', function () {
 
 Route::prefix('/api')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
-        return $request->user();
+        return $request->user()->append([
+            'unread_notifications_count',
+            'unread_messages_count'
+        ]);
     });
 
     Route::apiResource('users', UserController::class)->only(['show', 'update']);

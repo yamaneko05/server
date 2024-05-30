@@ -20,6 +20,12 @@ class Room extends Model
         ->whereNull('read_at')->count();
     }
 
+    public function unreadMessages(): HasMany {
+        return $this->messages()
+        ->where('user_id', '<>', Auth::user()->id)
+        ->whereNull('read_at');
+    }
+
     public function users(): BelongsToMany {
         return $this->belongsToMany(User::class);
     }
