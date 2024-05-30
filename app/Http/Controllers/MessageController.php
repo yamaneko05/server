@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewMessage;
 use App\Models\Message;
 use App\Models\Room;
 use Illuminate\Http\Request;
@@ -21,6 +22,8 @@ class MessageController extends Controller
         $message->user_id = $request->user()->id;
         $message->text = $request->text;
         $room->messages()->save($message);
+
+        broadcast(new NewMessage($message));
 
         return $message;
     }
