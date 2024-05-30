@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class RoomController extends Controller
 {   
     public function index (User $user) {
-        return $user->rooms;
+        return $user->rooms->append('unread_messages_count');
     }
 
     public function show (Room $room) {

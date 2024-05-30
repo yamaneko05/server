@@ -26,4 +26,8 @@ class LikeController extends Controller
 
         return response('');
     }
+
+    public function likers (Post $post) {
+        return $post->likers;
+    }
 }

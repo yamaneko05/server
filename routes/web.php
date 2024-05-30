@@ -25,6 +25,8 @@ Route::prefix('/api')->middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/users/{user}/like', [LikeController::class, 'like']);
     Route::post('/users/{user}/unlike', [LikeController::class, 'unlike']);
+
+    Route::get('/posts/{post}/likers', [LikeController::class, 'likers']);
     
     Route::post('/users/{user}/follow', [FollowingController::class, 'follow']);
     Route::post('/users/{user}/unfollow', [FollowingController::class, 'unfollow']);
