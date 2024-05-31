@@ -9,9 +9,13 @@ class PostController extends Controller
 {
     public function index (Request $request) {
         $parent_id = $request->parent_id;
+        $text = $request->text;
 
         return Post::orderBy('created_at', 'desc')
             ->whereNull('parent_id')
+            ->when($text, function ($query) use ($text) {
+                $query->where('text', 'like', "%{$text}%");
+            })
             ->when($parent_id, function ($query) use ($parent_id) {
                 $query->where('parent_id', $parent_id);
             })

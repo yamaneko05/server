@@ -23,7 +23,7 @@ Route::prefix('/api')->middleware(['auth:sanctum'])->group(function () {
         ]);
     });
 
-    Route::apiResource('users', UserController::class)->only(['show', 'update']);
+    Route::apiResource('users', UserController::class)->only(['index', 'show', 'update']);
     Route::apiResource('posts', PostController::class)->only(['index', 'show', 'store', 'destroy']);
 
     Route::post('/users/{user}/like', [LikeController::class, 'like']);
